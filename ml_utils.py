@@ -1,5 +1,5 @@
 """
-A series of helper functions usefull for ML tasks.
+A series of utility functions usefull for ML tasks.
 """
 
 import matplotlib.pyplot as plt
