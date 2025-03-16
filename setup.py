@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
     name="ml_utils",
     version="0.1",
-    py_modules=["ml_utils"],
+    packages=find_packages(),
     install_requires=["torch", "matplotlib", "numpy", "tqdm"],
     author="Jonas Kleinebecker",
     author_email="jonaskleinebecker@gmail.com",
