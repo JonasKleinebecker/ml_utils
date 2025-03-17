@@ -97,8 +97,25 @@ def test_step_classification(
         for X, y in tqdm(testloader):
             X = X.to(device)
             y = y.to(device)
+
+        if isinstance(X, torch.Tensor):
             y_logits = model(X)
+        elif isinstance(X, Iterable):
+            y_logits = model(*X)
+        else:
+            raise ValueError("X must be a torch.Tensor or Iterable of torch.Tensors")
+        if y_logits.ndim == 1:
+            y_logits = y_logits.unsqueeze(1, dim=1)
+        if y_logits.ndim > 2:
+            raise ValueError(
+                "y_logits must be a 1D or 2D tensor but has shape "
+                + str(y_logits.shape)
+            )
+        if y_logits.shape[1] == 1:
+            y_preds = torch.round(torch.sigmoid(y_logits))
+        else:
             y_preds = torch.argmax(y_logits, dim=1)
+            y = torch.argmax(y, dim=1)
             loss = loss_fn(y_logits, y)
             metrics["loss"] += loss.item()
             for metric_fn in metric_fns:
